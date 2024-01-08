@@ -59,13 +59,13 @@ sudo pnpm exec playwright install firefox
 ## Usage
 
 ```shell
-python connect.py
+sudo python connect.py
 ```
 
 If using `systemd-resolved`, after a connection is established, run
 
 ```shell
-./dnsup.sh
+./dnsup.sh  # sudo is optional here thanks to polkit
 ```
 
 Otherwise, figure out DNS on your own.
