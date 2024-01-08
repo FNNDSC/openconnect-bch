@@ -1,7 +1,7 @@
 # openconnect-bch
 
 This is a set of scripts for connecting to the Boston Children's Hospital VPN
-using open-source, privacy-friendly, CLI-first, and secure open-source software.
+using open-source, privacy-friendly, CLI-first, and secure software.
 More generally, it provides a solution for connecting to a commercial VPN service
 called "Pulse Connect Secure" aka "Ivanti" that requires 2-factor authorization
 with Duo.
@@ -59,13 +59,13 @@ sudo pnpm exec playwright install firefox
 ## Usage
 
 ```shell
-python connect.py
+sudo python connect.py
 ```
 
 If using `systemd-resolved`, after a connection is established, run
 
 ```shell
-./dnsup.sh
+./dnsup.sh  # sudo is optional here thanks to polkit
 ```
 
 Otherwise, figure out DNS on your own.
