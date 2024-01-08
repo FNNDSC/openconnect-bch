@@ -1,0 +1,20 @@
+{
+  "name": "openconnect-bch",
+  "description": "FOSS CLI client for Boston Children Hospital VPN",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "playwright": "playwright test --quiet"
+  },
+  "keywords": [],
+  "author": "Jennings Zhang <jennings.zhang@childrens.harvard.edu>",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.1",
+    "@types/node": "^20.10.6"
+  },
+  "dependencies": {
+    "koa": "^2.15.0"
+  }
+}
