@@ -18,9 +18,9 @@ VPN_URL = 'https://vpn.childrens.harvard.edu'
 
 def connect_to_bch_vpn(given_username: Optional[str], given_password: Optional[str]):
     playwright_proc, dsid_file, ipc_server = run_playwright_in_background()
-    send_data('http://localhost:8080', data=use_or_input('Username: ', given_username))
-    send_data('http://localhost:8080', data=use_or_input('Password: ', given_password, getpass))
-    send_data('http://localhost:8080', data=input('Duo passcode (from SMS): '))
+    send_data(ipc_server, data=use_or_input('Username: ', given_username))
+    send_data(ipc_server, data=use_or_input('Password: ', given_password, getpass))
+    send_data(ipc_server, data=input('Duo passcode (from SMS): '))
     playwright_proc.wait()
     dsid_value = dsid_file.read_text().strip()
     openconnect_with(dsid_value)
@@ -46,7 +46,7 @@ def run_playwright_in_background() -> tuple[sp.Popen, Path, str]:
 
 
 def random_port() -> int:
-    return random.randint(20000, 90000)
+    return random.randint(20000, 65535)
 
 
 def tmp_file() -> Path:
