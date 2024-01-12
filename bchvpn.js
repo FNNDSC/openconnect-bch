@@ -106,6 +106,7 @@ const DUO_IFRAME_POLL_OPTIONS = {
   await page.goto('https://vpn.childrens.harvard.edu/dana-na/auth/url_5/welcome.cgi');
   await page.locator('#username').fill(values['username'] || await read({prompt: 'Username: '}));
   await page.locator('#password').fill(values['password'] || await read({prompt: 'Password: ', silent: true}));
+  console.log();
   await page.click('#btnSubmit_6');
 
   await expect
