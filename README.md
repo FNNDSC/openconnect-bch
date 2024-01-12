@@ -56,6 +56,8 @@ Duo _must_ be configured to behave one of two ways:
 
 To configure Duo, log into https://vpn.childrens.harvard.edu or log into https://outlook.office365.com for the first time.
 
+![Screenshot of Duo](./duo_automatic_push.png)
+
 ## Usage
 
 - `node bchvpn.js` will prompt you for your username and password, then you will receive a Duo push notification.
@@ -64,10 +66,13 @@ To configure Duo, log into https://vpn.childrens.harvard.edu or log into https:/
 
 ## DNS
 
-If using `systemd-resolved`, after a connection is established, run `sudo ./dnsup.sh`.
+DNS is *partially* handled. The `vpn-slice` component adds entries to `/etc/hosts`. A few important FNNDSC hostnames
+and intranet hosts are configured by default. This list can be edited in `bchvpn.js` on line 10. Or, add the
+`-a/--append-network` option of `bchvpn.js`. For example,
+`node bchvpn.js -a centurion -a chris-next -a chris-next -a chbwiki -a rc-gitlab.chboston.org`
 
-Otherwise, figure out DNS on your own. `vpn-slice` can help you by modifying `/etc/hosts`:
-add arguments to `vpn-slice` using the `-a/--append-network` option of `bchvpn.js`. For example, `node bchvpn.js -a centurion -a chris-next -a chris-next -a chbwiki -a rc-gitlab.chboston.org`
+If using `systemd-resolved`, after a connection is established, run `sudo ./dnsup.sh` to connect to the DNS servers
+directly, Otherwise, figure it out on your own.
 
 ## Known Issues
 

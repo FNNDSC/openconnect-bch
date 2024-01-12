@@ -5,6 +5,15 @@ import { read } from 'read';
 import { parseArgs } from 'node:util';
 
 /**
+ * vpn-slice parameter: list of private networks and hostnames.
+ */
+const DEFAULT_PRIVATE_NETWORKS = `
+10.72.0.0/16 10.36.0.0/16 10.20.0.0/16 10.26.0.0/16 134.174.12.0/24 134.174.13.0/24 10.7.34.0/24
+pangea centurion titan rc-live rc-golden chris-next galena
+web2.tch.harvard.edu chbwiki.tch.harvard.edu rc-gitlab.chboston.org hrprd.tch.harvard.edu
+`.replace('\n', ' ');
+
+/**
  * Functions for handling the Duo 2-factor authentication.
  */
 const DUO_HANDLERS = {
@@ -28,7 +37,7 @@ const { values } = parseArgs({
   options: {
     'private-networks': {
       type: 'string',
-      default: '10.72.0.0/16 10.36.0.0/16 10.20.0.0/16 10.26.0.0/16 134.174.12.0/24 134.174.13.0/24 10.7.34.0/24'
+      default: DEFAULT_PRIVATE_NETWORKS
     },
     'append-network': {
       type: 'string',
