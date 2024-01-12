@@ -3,18 +3,21 @@
   "description": "FOSS CLI client for Boston Children Hospital VPN",
   "version": "0.0.0",
   "private": true,
-  "main": "index.js",
+  "main": "bchvpn.js",
+  "type": "module",
   "scripts": {
-    "playwright": "playwright test --quiet"
+    "start": "node bchvpn.js"
   },
   "keywords": [],
   "author": "Jennings Zhang <jennings.zhang@childrens.harvard.edu>",
   "license": "MIT",
   "devDependencies": {
-    "@playwright/test": "^1.40.1",
     "@types/node": "^20.10.6"
   },
   "dependencies": {
-    "koa": "^2.15.0"
+    "koa": "^2.15.0",
+    "playwright": "^1.40.1",
+    "@playwright/test": "^1.40.1",
+    "read": "^3.0.1"
   }
 }

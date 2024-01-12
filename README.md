@@ -8,10 +8,6 @@ with Duo.
 
 See also: https://gitlab.com/openconnect/openconnect/-/issues/636
 
-## Assumptions
-
-It is assumed that you use SMS authorization as the default. Currently, Duo app 2FA is not supported.
-
 ## Split-Tunneling
 
 These scripts implement both split-tunneling and split-DNS, which means they will use VPN routes only
@@ -21,17 +17,9 @@ is better for both privacy and performance.
 
 ## How It Works
 
-`connect.py` is a simple Python script which runs `bchvpn.spec.ts` using [Playwright](https://playwright.dev/).
-Playwright is a JavaScript system for browser testing of web apps, which runs (a headless instance of) Firefox
-in the background. `bchvpn.spec.ts` opens https://vpn.childrens.harvard.edu in the Firefox instance, then requests
-data from `connect.py`. `connect.py` prompts for user input and sends data to `bchvpn.spec.ts` over an HTTP server.
-`bchvpn.spec.ts` fills in the HTML forms appearing on https://vpn.childrens.harvard.edu.
-
-Currently, `connect.py` and `bchvpn.spec.ts` are hard-coded to ask for:
-
-1. Username
-2. Password
-3. Duo passcode
+`bchvpn.js` is a Node.js script which opens `https://vpn.childrens.harvard.edu` in a headless web browser using [Playwright](https://playwright.dev/).
+It fills in the HTML form using command-line user input, then proceeds to Duo 2-factor authorization (2FA). After Duo 2FA, the server returns a `DSID`
+cookie which can be used by `openconnect`.
 
 ## Depencencies
 
@@ -43,10 +31,13 @@ Currently, `connect.py` and `bchvpn.spec.ts` are hard-coded to ask for:
 - Check the [Playwright system requirements](https://playwright.dev/docs/intro#system-requirements)
 - systemd-resolved (for DNS)
 
-## Installation
+On Arch Linux with paru or yay, you can run
 
-> [!WARNING]  
-> We'll need `sudo` because `vpn-slice` writes to `/etc/hosts` and `openconnect` needs `cap_net_admin+ep`
+```shell
+paru -S --needed openconnect vpn-slice pnpm
+```
+
+## Installation
 
 ```shell
 git clone https://github.com/FNNDSC/openconnect-bch.git
@@ -56,21 +47,30 @@ pnpm i
 sudo pnpm exec playwright install firefox
 ```
 
+## Setup
+
+Duo _must_ be configured to behave one of two ways:
+
+- **auto**: Duo automatically sends a push-notification to a mobile app
+- **SMS**: The first option presented by Duo is to send a passcode to a phone using SMS
+
+To configure Duo, log into https://vpn.childrens.harvard.edu or log into https://outlook.office365.com for the first time.
+
 ## Usage
 
-```shell
-sudo python connect.py
-```
+- `node bchvpn.js` will prompt you for your username and password, then you will receive a Duo push notification.
+- Alternatively, run `node bchvpn.js --duo sms` if using SMS for 2FA.
+- You can specify username and password as arguments: `node bchvpn.js --username chXXXXXX --password 12345678`. This is insecure.
 
-If using `systemd-resolved`, after a connection is established, run
+## DNS
 
-```shell
-./dnsup.sh  # sudo is optional here thanks to polkit
-```
+If using `systemd-resolved`, after a connection is established, run `sudo ./dnsup.sh`.
 
-Otherwise, figure out DNS on your own.
+Otherwise, figure out DNS on your own. `vpn-slice` can help you by modifying `/etc/hosts`:
+add arguments to `vpn-slice` using the `-a/--append-network` option of `bchvpn.js`. For example, `node bchvpn.js -a centurion -a chris-next -a chris-next -a chbwiki -a rc-gitlab.chboston.org`
 
-## Configuration
+## Known Issues
 
-`vpn-slice` can be configured by the `PRIVATE_SUBNETS` variable of `connect.py`. You can add hostnames to it, see
-https://github.com/dlenski/vpn-slice#usage
+If you have a stale VPN connection, `bchvpn.js` will not work. To unblock this issue, either wait 24 hours and try again,
+or log in manually at https://vpn.childrens.harvard.edu, kill the stale session, copy the DSID cookie's value, and run
+`openconnect`.
