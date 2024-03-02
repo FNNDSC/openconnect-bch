@@ -11,7 +11,7 @@ import chalk from 'chalk';
  */
 const DEFAULT_PRIVATE_NETWORKS = `
 10.72.0.0/16 10.36.0.0/16 10.20.0.0/16 10.26.0.0/16 134.174.12.0/24 134.174.13.0/24 10.7.34.0/24
-pangea centurion titan rc-live rc-golden chris-next galena
+pangea centurion titan rc-live rc-golden chris-next galena fnndsc.tch.harvard.edu fnndsc.childrens.harvard.edu
 web2.tch.harvard.edu chbwiki.tch.harvard.edu rc-gitlab.chboston.org hrprd.tch.harvard.edu
 `;
 
